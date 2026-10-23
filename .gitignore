@@ -6,3 +6,6 @@ out
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# Guías de pago y sus fuentes: nunca al repo ni a rutas públicas
+contenido-privado/
