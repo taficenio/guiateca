@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
-// Genera el sitio como archivos estáticos en la carpeta `out/` (para Cloudflare).
+// Por ahora el sitio se exporta como archivos estáticos en `out/` (lo sirve Cloudflare).
+// Cuando haya login, pagos y descargas privadas, pasamos a un adaptador con servidor.
 const nextConfig: NextConfig = {
   output: "export",
 };

@@ -1,6 +1,21 @@
+// Catálogo de ejemplo. En el paso 2 de la hoja de ruta esto pasa a la base de datos.
+
 export type CategoriaId = "tramites" | "finanzas" | "docentes" | "trabajo" | "ia";
 
-export const categorias: { id: CategoriaId; label: string }[] = [
+export type Categoria = { id: CategoriaId; label: string };
+
+export type Guia = {
+  slug: string;
+  titulo: string;
+  categoria: CategoriaId;
+  formato: string;
+  resumen: string;
+  precio: number; // en USD
+  paraQuien: string;
+  indice: string[];
+};
+
+export const categorias: Categoria[] = [
   { id: "tramites", label: "Trámites y emigrar" },
   { id: "finanzas", label: "Finanzas personales" },
   { id: "docentes", label: "Docentes" },
@@ -8,28 +23,196 @@ export const categorias: { id: CategoriaId; label: string }[] = [
   { id: "ia", label: "IA práctica" },
 ];
 
-export type Guia = {
-  slug: string;
-  categoria: CategoriaId;
-  titulo: string;
-  resumen: string;
-  paraQuien: string;
-  formato: string;
-  precioUsd: number;
-  indice: string[];
-};
-
-// Catálogo de ejemplo. Reemplazar por la base de datos (ver CLAUDE.md).
 export const guias: Guia[] = [
-  { slug: "ciudadania-italiana", categoria: "tramites", formato: "PDF · 24 págs", precioUsd: 3, titulo: "Ciudadanía italiana paso a paso", resumen: "Documentos, traducciones, turnos y costos estimados, en orden.", paraQuien: "Descendientes de italianos que quieren iniciar el trámite sin gestor.", indice: ["¿Te corresponde? Cómo verificarlo", "Partidas y apostillas: qué pedir y dónde", "Vía consulado vs. vía judicial", "Checklist final y errores comunes"] },
-  { slug: "alta-monotributo", categoria: "tramites", formato: "PDF · 12 págs", precioUsd: 2, titulo: "Alta de monotributo sin errores", resumen: "Cómo inscribirte, elegir categoría y emitir tu primera factura.", paraQuien: "Freelancers y emprendedores que facturan por primera vez.", indice: ["Requisitos y clave fiscal", "Cómo elegir tu categoría", "Emitir factura electrónica", "Recategorización y vencimientos"] },
-  { slug: "auto-usado", categoria: "tramites", formato: "PDF · 16 págs", precioUsd: 2, titulo: "Comprar un auto usado sin sorpresas", resumen: "Verificaciones, papeles y preguntas antes de pagar.", paraQuien: "Quien compra su primer auto usado a un particular.", indice: ["Informe de dominio y multas", "Revisión mecánica básica", "Transferencia y costos", "Señales de alerta"] },
-  { slug: "presupuesto-familiar", categoria: "finanzas", formato: "Plantilla Sheets", precioUsd: 3, titulo: "Presupuesto familiar automático", resumen: "Planilla editable con categorías, metas de ahorro y gráficos.", paraQuien: "Familias que quieren saber en qué se va la plata cada mes.", indice: ["Cómo cargar ingresos y gastos", "Categorías sugeridas", "Metas de ahorro", "Lectura del resumen mensual"] },
-  { slug: "ahorrar-invertir-inflacion", categoria: "finanzas", formato: "PDF · 20 págs", precioUsd: 3, titulo: "Ahorrar e invertir con inflación", resumen: "Opciones básicas explicadas en simple, con pros y contras.", paraQuien: "Principiantes que nunca invirtieron.", indice: ["Fondo de emergencia", "Instrumentos básicos explicados", "Riesgo: cómo pensarlo", "Armar tu primer plan"] },
-  { slug: "planificacion-primaria", categoria: "docentes", formato: "PDF + Canva", precioUsd: 3, titulo: "Planificación anual de primaria", resumen: "Estructura editable por trimestre, lista para adaptar.", paraQuien: "Docentes de nivel primario.", indice: ["Plantilla por trimestre", "Ejemplos de secuencias", "Rúbricas de evaluación", "Versión editable en Canva"] },
-  { slug: "comprension-lectora", categoria: "docentes", formato: "PDF · 40 fichas", precioUsd: 2, titulo: "Fichas de comprensión lectora", resumen: "Actividades imprimibles por nivel de dificultad.", paraQuien: "Docentes y familias de alumnos de 2.º a 5.º grado.", indice: ["Nivel inicial", "Nivel intermedio", "Nivel avanzado", "Claves de corrección"] },
-  { slug: "cv-filtros", categoria: "trabajo", formato: "Plantilla Docs", precioUsd: 2, titulo: "CV que pasa los filtros", resumen: "Plantilla editable y guía para redactar logros.", paraQuien: "Personas que buscan trabajo en relación de dependencia o remoto.", indice: ["Estructura recomendada", "Cómo escribir logros", "Palabras clave", "Carta de presentación modelo"] },
-  { slug: "clientes-freelancer", categoria: "trabajo", formato: "PDF · 18 págs", precioUsd: 3, titulo: "Conseguir clientes como freelancer", resumen: "Dónde buscar, cómo cotizar y cómo cobrar desde el exterior.", paraQuien: "Freelancers que arrancan o quieren cobrar en dólares.", indice: ["Plataformas y canales", "Cómo armar tu portfolio", "Cotizar sin regalarte", "Opciones para cobrar"] },
-  { slug: "prompts-inmobiliarias", categoria: "ia", formato: "PDF · 100 prompts", precioUsd: 2, titulo: "Prompts para inmobiliarias", resumen: "Instrucciones listas para avisos, respuestas y seguimiento.", paraQuien: "Agentes y corredores inmobiliarios.", indice: ["Descripciones de propiedades", "Respuestas a consultas", "Seguimiento de clientes", "Contenido para redes"] },
-  { slug: "ia-docentes", categoria: "ia", formato: "PDF · 22 págs", precioUsd: 3, titulo: "IA para docentes en 1 hora", resumen: "Cómo preparar clases, evaluaciones y material con IA.", paraQuien: "Docentes sin experiencia previa con IA.", indice: ["Primeros pasos", "Planificar una clase", "Crear evaluaciones", "Límites y buenas prácticas"] },
+  {
+    slug: "ciudadania-italiana-paso-a-paso",
+    titulo: "Ciudadanía italiana paso a paso",
+    categoria: "tramites",
+    formato: "PDF",
+    resumen:
+      "Cómo armar tu árbol genealógico, qué actas pedir, dónde legalizarlas y cómo prepararte para el turno.",
+    precio: 3,
+    paraQuien:
+      "Descendientes de italianos que quieren iniciar el trámite y no saben por dónde empezar.",
+    indice: [
+      "¿Te corresponde? Requisitos y línea de descendencia",
+      "Qué actas necesitás y dónde pedirlas",
+      "Apostilla, traducciones y rectificaciones",
+      "Consulado o Italia: pros y contras de cada vía",
+      "Checklist final antes del turno",
+    ],
+  },
+  {
+    slug: "alta-de-monotributo",
+    titulo: "Alta de monotributo sin vueltas",
+    categoria: "tramites",
+    formato: "PDF",
+    resumen:
+      "Elegí la categoría correcta, hacé el alta online y emití tu primera factura sin errores.",
+    precio: 2,
+    paraQuien: "Personas que empiezan a facturar por primera vez como independientes.",
+    indice: [
+      "Qué es el monotributo y cuándo conviene",
+      "Cómo elegir tu actividad y categoría",
+      "Alta online paso a paso",
+      "Tu primera factura electrónica",
+      "Vencimientos y recategorización",
+    ],
+  },
+  {
+    slug: "comprar-auto-usado",
+    titulo: "Comprar un auto usado sin sorpresas",
+    categoria: "tramites",
+    formato: "PDF + checklist",
+    resumen:
+      "Qué revisar antes de pagar, qué papeles pedir y cómo hacer la transferencia de forma segura.",
+    precio: 2,
+    paraQuien: "Quien va a comprar su primer auto usado a un particular o en una agencia.",
+    indice: [
+      "Antes de ver el auto: precio de referencia y deudas",
+      "Revisión mecánica: checklist imprimible",
+      "Documentación que te tienen que mostrar",
+      "Pago seguro y transferencia",
+      "Seguro y primeros trámites como dueño",
+    ],
+  },
+  {
+    slug: "presupuesto-familiar",
+    titulo: "Presupuesto familiar en una planilla",
+    categoria: "finanzas",
+    formato: "Plantilla Sheets",
+    resumen:
+      "Planilla lista para cargar ingresos y gastos, con gráficos automáticos y alertas de desvío.",
+    precio: 2,
+    paraQuien: "Familias y personas que quieren saber a dónde se va la plata cada mes.",
+    indice: [
+      "Cómo usar la planilla en 10 minutos",
+      "Categorías de gasto recomendadas",
+      "Gastos fijos, variables y anuales",
+      "Lectura de los gráficos",
+      "Rutina mensual de revisión",
+    ],
+  },
+  {
+    slug: "ahorrar-con-inflacion",
+    titulo: "Ahorrar con inflación: guía práctica",
+    categoria: "finanzas",
+    formato: "PDF",
+    resumen:
+      "Opciones para proteger tus ahorros explicadas en simple, con sus riesgos y cuándo usar cada una.",
+    precio: 3,
+    paraQuien: "Personas sin experiencia en inversiones que quieren que su plata no pierda valor.",
+    indice: [
+      "Fondo de emergencia: cuánto y dónde",
+      "Plazo fijo, fondos comunes y cuentas remuneradas",
+      "Dólar: formas de acceso y costos",
+      "Riesgo, liquidez y plazo explicados fácil",
+      "Armá tu plan en tres pasos",
+    ],
+  },
+  {
+    slug: "planificacion-primaria",
+    titulo: "Planificación anual para primaria",
+    categoria: "docentes",
+    formato: "Plantilla Docs",
+    resumen:
+      "Plantilla editable de planificación anual y por unidad, con ejemplos completos por área.",
+    precio: 3,
+    paraQuien: "Docentes de nivel primario que quieren ahorrar tiempo al planificar.",
+    indice: [
+      "Estructura de la planificación anual",
+      "Cómo redactar propósitos y objetivos",
+      "Secuencias didácticas: modelo para completar",
+      "Criterios e instrumentos de evaluación",
+      "Ejemplos por área",
+    ],
+  },
+  {
+    slug: "fichas-comprension-lectora",
+    titulo: "Fichas de comprensión lectora",
+    categoria: "docentes",
+    formato: "PDF imprimible + Canva",
+    resumen:
+      "30 fichas con textos breves y actividades graduadas, listas para imprimir o adaptar en Canva.",
+    precio: 2,
+    paraQuien: "Docentes de 2.º a 5.º grado y familias que acompañan la lectura en casa.",
+    indice: [
+      "Cómo usar las fichas en el aula",
+      "Fichas de nivel inicial (1 a 10)",
+      "Fichas de nivel intermedio (11 a 20)",
+      "Fichas de nivel avanzado (21 a 30)",
+      "Respuestas sugeridas",
+    ],
+  },
+  {
+    slug: "cv-que-pasa-filtros",
+    titulo: "CV que pasa los filtros",
+    categoria: "trabajo",
+    formato: "Plantilla Docs + PDF",
+    resumen:
+      "Plantilla de CV clara y compatible con sistemas de selección, más una guía para redactar logros.",
+    precio: 2,
+    paraQuien: "Quien está buscando trabajo y no recibe respuestas a sus postulaciones.",
+    indice: [
+      "Qué mira un reclutador en 10 segundos",
+      "Estructura recomendada y errores comunes",
+      "Cómo escribir logros con números",
+      "Adaptar el CV a cada búsqueda",
+      "Perfil de LinkedIn alineado al CV",
+    ],
+  },
+  {
+    slug: "clientes-como-freelancer",
+    titulo: "Conseguir clientes como freelancer",
+    categoria: "trabajo",
+    formato: "PDF",
+    resumen:
+      "Cómo definir tu oferta, poner precio y conseguir los primeros clientes, con mensajes modelo.",
+    precio: 3,
+    paraQuien: "Freelancers que empiezan o quieren dejar de depender del boca a boca.",
+    indice: [
+      "Definí qué vendés y a quién",
+      "Cómo calcular tu precio por proyecto",
+      "Portfolio mínimo que convence",
+      "Mensajes modelo para contactar clientes",
+      "Presupuestos y acuerdos por escrito",
+    ],
+  },
+  {
+    slug: "prompts-para-inmobiliarias",
+    titulo: "Prompts de IA para inmobiliarias",
+    categoria: "ia",
+    formato: "PDF",
+    resumen:
+      "Más de 50 prompts listos para descripciones de propiedades, respuestas a consultas y redes.",
+    precio: 3,
+    paraQuien: "Agentes y equipos inmobiliarios que quieren ahorrar tiempo con IA.",
+    indice: [
+      "Cómo escribir un buen prompt",
+      "Descripciones de propiedades que venden",
+      "Respuestas rápidas a consultas",
+      "Publicaciones para redes sociales",
+      "Revisión y cuidado de datos personales",
+    ],
+  },
+  {
+    slug: "ia-para-docentes",
+    titulo: "IA para docentes: primeros pasos",
+    categoria: "ia",
+    formato: "PDF",
+    resumen:
+      "Usá la IA para preparar clases, actividades y rúbricas, con ejemplos y buenas prácticas.",
+    precio: 2,
+    paraQuien: "Docentes de cualquier nivel que nunca usaron IA o la usan poco.",
+    indice: [
+      "Qué puede y qué no puede hacer la IA",
+      "Preparar clases y actividades",
+      "Crear rúbricas y consignas",
+      "Adaptar materiales a distintos niveles",
+      "Uso responsable con estudiantes",
+    ],
+  },
 ];
+
+export const labelCategoria = (id: CategoriaId) =>
+  categorias.find((c) => c.id === id)?.label ?? id;

@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "guiateca",
   "compatibility_date": "2026-10-01",
-  // Sirve los archivos estáticos generados por `npm run build`.
+  // Sirve los archivos estáticos que genera `npm run build` en out/.
   "assets": {
     "directory": "./out",
     "not_found_handling": "404-page"
